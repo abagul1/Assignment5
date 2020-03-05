@@ -8,6 +8,10 @@ import java.util.LinkedHashSet;
 public class AnimatorModel implements AnimatorOperations {
   private LinkedHashSet<Shape> shapes;
 
+  public AnimatorModel() {
+
+  }
+
   @Override
   public void createAnimation(int height, int width) {
 
