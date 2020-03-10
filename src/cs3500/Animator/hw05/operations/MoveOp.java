@@ -1,4 +1,4 @@
-package cs3500.Animator.hw05.Operations;
+package cs3500.Animator.hw05.operations;
 
 import cs3500.Animator.hw05.AbstractOp;
 import cs3500.Animator.hw05.IElement;

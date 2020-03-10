@@ -1,19 +1,22 @@
 package cs3500.Animator.hw05;
 
 import java.awt.Color;
-import java.awt.image.ColorConvertOp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cs3500.Animator.hw05.Operations.ChangeColorOp;
-import cs3500.Animator.hw05.Operations.ChangeVisibilityOp;
-import cs3500.Animator.hw05.Operations.DeleteOp;
-import cs3500.Animator.hw05.Operations.InsertOp;
-import cs3500.Animator.hw05.Operations.MoveOp;
-import cs3500.Animator.hw05.Operations.RotateOp;
-import cs3500.Animator.hw05.Operations.ScaleOp;
+import javax.lang.model.element.Element;
+import javax.swing.text.html.HTMLDocument;
+
+import cs3500.Animator.hw05.operations.ChangeColorOp;
+import cs3500.Animator.hw05.operations.ChangeVisibilityOp;
+import cs3500.Animator.hw05.operations.DeleteOp;
+import cs3500.Animator.hw05.operations.InsertOp;
+import cs3500.Animator.hw05.operations.MoveOp;
+import cs3500.Animator.hw05.operations.RotateOp;
+import cs3500.Animator.hw05.operations.ScaleOp;
 
 public class AnimationModel implements IAnimation {
 
@@ -41,11 +44,10 @@ public class AnimationModel implements IAnimation {
   @Override
   public void move(String id, double x, double y, int startTick, int endTick) {
     this.checkNotNull();
-    this.checkIdExists(id);
 
     double deltaX = (x - elements.get(id).getPosn().getX()) / (endTick - startTick);
     double deltaY = (y - elements.get(id).getPosn().getY()) / (endTick - startTick);
-    for (int i = startTick; i <= endTick; i++) {
+    for (int i = startTick; i < endTick; i++) {
       operations.add(new MoveOp(elements.get(id), deltaX, deltaY, i));
     }
 
@@ -102,7 +104,7 @@ public class AnimationModel implements IAnimation {
     this.checkNotNull();
     this.checkIdExists(id);
     double da = angle / (endTick - startTick);
-    for (int i = startTick; i <= endTick; i++) {
+    for (int i = startTick; i < endTick; i++) {
       operations.add(new RotateOp(elements.get(id), da, i));
     }
   }
@@ -112,7 +114,7 @@ public class AnimationModel implements IAnimation {
     this.checkNotNull();
     this.checkIdExists(id);
     double ds = scaleFactor / (endTick - startTick);
-    for (int i = startTick; i <= endTick; i++) {
+    for (int i = startTick; i < endTick; i++) {
       operations.add(new ScaleOp(elements.get(id), ds, i));
     }
   }
@@ -127,7 +129,7 @@ public class AnimationModel implements IAnimation {
             / (double) (endTick - startTick);
     double db = (double) (color.getBlue() - elements.get(id).getColor().getBlue())
             / (double) (endTick - startTick);
-    for (int i = startTick; i <= endTick; i++) {
+    for (int i = startTick; i < endTick; i++) {
       operations.add(new ChangeColorOp(elements.get(id), dr, dg, db, i));
     }
   }
@@ -136,9 +138,15 @@ public class AnimationModel implements IAnimation {
   public void changeVisibility(String id, int alpha, int startTick, int endTick) {
     this.checkNotNull();
     this.checkIdExists(id);
-    double dalpha = (double) (alpha - elements.get(id).getColor().getAlpha())
-            / (double) (endTick - startTick);
-    for (int i = startTick; i <= endTick; i++) {
+    int trueAlpha = 0;
+    for (IOperation op : operations) {
+      if (op.getElementId().equals(id) && op instanceof InsertOp) {
+        trueAlpha = ((InsertOp) op).getAlpha();
+      }
+    }
+    double dalpha = (double) (alpha - trueAlpha)
+            / (endTick - startTick);
+    for (int i = startTick; i < endTick; i++) {
       operations.add(new ChangeVisibilityOp(elements.get(id), dalpha, i));
     }
   }
@@ -154,8 +162,13 @@ public class AnimationModel implements IAnimation {
     if (operations == null) {
       throw new IllegalStateException("Error: Operations is null");
     }
-
-    operations.add(new InsertOp(elements, element, tick));
+    int alpha = element.getColor().getAlpha();
+    operations.add(new InsertOp(elements, element, alpha, tick));
+    element.setColor(new Color(element.getColor().getRed(),
+            element.getColor().getGreen(),
+            element.getColor().getBlue(),
+            0));
+    elements.put(element.getID(), element);
 
     try {
       addVerboseInsert(element, tick);
@@ -196,28 +209,38 @@ public class AnimationModel implements IAnimation {
     return null;
   }
 
+  @Override
   public void executeOperations() {
     while (!operations.isEmpty()) {
-      for (IOperation op : operations) {
+      for (Iterator<IOperation> iterator = operations.iterator(); iterator.hasNext();) {
+        IOperation op = iterator.next();
+          if (op.getTickToFireAt() == currentTick) {
+          op.fire();
+          iterator.remove();
+        }
+      }
+      currentTick++;
+    }
+  }
+
+  @Override
+  public void executeOperationsUntil(int tick) {
+    for (currentTick = 0; currentTick < tick; currentTick++) {
+      if (operations.isEmpty()) {
+        break;
+      }
+      for (Iterator<IOperation> iterator = operations.iterator(); iterator.hasNext();) {
+        IOperation op = iterator.next();
         if (op.getTickToFireAt() == currentTick) {
           op.fire();
-          operations.remove(op);
+          iterator.remove();
         }
-        currentTick++;
       }
     }
   }
 
-  public void executeOperationsUntil(int tick) {
-    while (!operations.isEmpty()) {
-      for (; currentTick <= tick; currentTick++) {
-        for (IOperation op : operations) {
-          if (op.getTickToFireAt() == currentTick) {
-            op.fire();
-            operations.remove(op);
-          }
-        }
-      }
-    }
+  @Override
+  public IElement getElement(String id) {
+    return elements.get(id);
   }
 }

@@ -40,4 +40,10 @@ public interface IAnimation {
   String getVerboseAnimation();
 
   IFrame getFrameAtTick(int tick);
+
+  void executeOperations();
+
+  void executeOperationsUntil(int tick);
+
+  IElement getElement(String id);
 }

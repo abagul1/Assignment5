@@ -42,6 +42,15 @@ public interface IElement {
   String getID();
 
   /**
+   * Get the angle of this element.
+   *
+   * The angle is the current angle that the object is rotated with respect to 0.
+   *
+   * @return  the angle of the element.
+   */
+  double getAngle();
+
+  /**
    * Sets the color of an element to the specified color.
    *
    * As Color is in RGBA format, this can be used to alter the alpha value as well as the actual

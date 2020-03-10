@@ -60,7 +60,14 @@ public abstract class AbstractElement implements IElement {
   }
 
   @Override
-  public abstract void rotate(double angle);
+  public double getAngle() {
+    return angle;
+  }
+
+  @Override
+  public void rotate(double da) {
+    this.angle += da;
+  }
 
   @Override
   public abstract void scale(double ds);

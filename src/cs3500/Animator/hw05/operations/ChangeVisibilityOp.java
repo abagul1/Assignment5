@@ -1,4 +1,4 @@
-package cs3500.Animator.hw05.Operations;
+package cs3500.Animator.hw05.operations;
 
 import java.awt.*;
 
@@ -7,17 +7,19 @@ import cs3500.Animator.hw05.IElement;
 
 public class ChangeVisibilityOp extends AbstractOp {
   private IElement element;
-  private double dalpha;
+  private int dalpha;
 
   public ChangeVisibilityOp(IElement e, double dalpha, int tick) {
     super(tick);
     this.element = e;
-    this.dalpha = dalpha;
+    this.dalpha = (int) dalpha;
   }
 
   @Override
   public void fire() {
-    Color c = new Color((int) ((double) element.getColor().getAlpha() + dalpha));
+    Color c = new Color(element.getColor().getRed(),
+            element.getColor().getGreen(),
+            element.getColor().getBlue(), element.getColor().getAlpha() + dalpha);
     element.setColor(c);
   }
 

@@ -1,21 +1,22 @@
-package cs3500.Animator.hw05.Operations;
+package cs3500.Animator.hw05.operations;
 
 import cs3500.Animator.hw05.AbstractOp;
 import cs3500.Animator.hw05.IElement;
 
-public class ScaleOp extends AbstractOp {
-  private IElement element;
-  private double ds;
+public class RotateOp extends AbstractOp {
 
-  public ScaleOp(IElement e, double ds, int tick) {
+  private IElement element;
+  private double da;
+
+  public RotateOp(IElement e, double da, int tick) {
     super(tick);
     this.element = e;
-    this.ds = ds;
+    this.da = da;
   }
 
   @Override
   public void fire() {
-    element.scale(ds);
+    element.rotate(da);
   }
 
   @Override
