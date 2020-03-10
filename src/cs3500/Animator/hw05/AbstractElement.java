@@ -25,11 +25,13 @@ public abstract class AbstractElement implements IElement {
   protected Color color;
   protected Posn center;
   protected String id;
+  protected double angle;
 
-  public AbstractElement(Color c, Posn p, String id) {
+  public AbstractElement(Color c, Posn p, String id, double angle) {
     this.color = c;
     this.center = new Posn(p);
     this.id = id;
+    this.angle = angle;
   }
 
   @Override
@@ -57,17 +59,9 @@ public abstract class AbstractElement implements IElement {
     this.center = new Posn(p);
   }
 
-  /**
-   * Rotate the element. Positive angles are CCW, negative angles are CW.
-   * @param angle  the angle to rotate the element by
-   */
+  @Override
   public abstract void rotate(double angle);
 
-  /**
-   * Scale the element by the given scale factor.
-   * 0 < scaleFactor < inf
-   * @param scaleFactor  the scale factor to multiply the size of the element by
-   * @throws IllegalArgumentException  if the scaleFactor is out of bounds
-   */
-  public abstract void scale(double scaleFactor);
+  @Override
+  public abstract void scale(double ds);
 }

@@ -1,10 +1,19 @@
 package cs3500.Animator.hw05;
 
 import java.awt.Color;
+import java.awt.image.ColorConvertOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cs3500.Animator.hw05.Operations.ChangeColorOp;
+import cs3500.Animator.hw05.Operations.ChangeVisibilityOp;
+import cs3500.Animator.hw05.Operations.DeleteOp;
+import cs3500.Animator.hw05.Operations.InsertOp;
+import cs3500.Animator.hw05.Operations.MoveOp;
+import cs3500.Animator.hw05.Operations.RotateOp;
+import cs3500.Animator.hw05.Operations.ScaleOp;
 
 public class AnimationModel implements IAnimation {
 
@@ -31,31 +40,20 @@ public class AnimationModel implements IAnimation {
 
   @Override
   public void move(String id, double x, double y, int startTick, int endTick) {
-    if (elements == null) {
-      throw new IllegalStateException("Error: Element map is null");
-    }
-    if (operations == null) {
-      throw new IllegalStateException("Error: Operations is null");
+    this.checkNotNull();
+    this.checkIdExists(id);
+
+    double deltaX = (x - elements.get(id).getPosn().getX()) / (endTick - startTick);
+    double deltaY = (y - elements.get(id).getPosn().getY()) / (endTick - startTick);
+    for (int i = startTick; i <= endTick; i++) {
+      operations.add(new MoveOp(elements.get(id), deltaX, deltaY, i));
     }
 
     try {
-      double deltaX = (x - elements.get(id).getPosn().getX()) / (endTick - startTick);
-      double deltaY = (y - elements.get(id).getPosn().getY()) / (endTick - startTick);
-
-      for (int i = startTick; i <= endTick; i++) {
-        operations.add(new MoveOp(elements.get(id), deltaX, deltaY, i));
-      }
-
-      try {
-        addVerboseMove(id, x, y, startTick, endTick);
-      }
-      catch (IllegalStateException e) {
-        throw new IllegalStateException(e.getMessage());
-      }
-
+      addVerboseMove(id, x, y, startTick, endTick);
     }
-    catch (NullPointerException e) {
-      throw new IllegalArgumentException("No element with that ID exists");
+    catch (IllegalStateException e) {
+      throw new IllegalStateException(e.getMessage());
     }
   }
 
@@ -77,24 +75,72 @@ public class AnimationModel implements IAnimation {
     verboseOps.get(startTick).add(str.toString());
   }
 
+  /**
+   * Checks that the elements and operations fields are not null.
+   */
+  private void checkNotNull() {
+    if (elements == null) {
+      throw new IllegalStateException("Error: Element map is null");
+    }
+    if (operations == null) {
+      throw new IllegalStateException("Error: Operations is null");
+    }
+  }
+
+  /**
+   * Checks that the elements and operations fields are not null.
+   * @param id is the element id
+   */
+  private void checkIdExists(String id) {
+    if (!elements.containsKey(id)) {
+      throw new IllegalArgumentException("No element with that ID exists");
+    }
+  }
+
   @Override
   public void rotate(String id, double angle, int startTick, int endTick) {
-
+    this.checkNotNull();
+    this.checkIdExists(id);
+    double da = angle / (endTick - startTick);
+    for (int i = startTick; i <= endTick; i++) {
+      operations.add(new RotateOp(elements.get(id), da, i));
+    }
   }
 
   @Override
   public void scale(String id, double scaleFactor, int startTick, int endTick) {
-
+    this.checkNotNull();
+    this.checkIdExists(id);
+    double ds = scaleFactor / (endTick - startTick);
+    for (int i = startTick; i <= endTick; i++) {
+      operations.add(new ScaleOp(elements.get(id), ds, i));
+    }
   }
 
   @Override
   public void changeColor(String id, Color color, int startTick, int endTick) {
-
+    this.checkNotNull();
+    this.checkIdExists(id);
+    double dr = (double) (color.getRed() - elements.get(id).getColor().getRed())
+            / (double) (endTick - startTick);
+    double dg = (double) (color.getGreen() - elements.get(id).getColor().getGreen())
+            / (double) (endTick - startTick);
+    double db = (double) (color.getBlue() - elements.get(id).getColor().getBlue())
+            / (double) (endTick - startTick);
+    for (int i = startTick; i <= endTick; i++) {
+      operations.add(new ChangeColorOp(elements.get(id), dr, dg, db, i));
+    }
   }
 
   @Override
   public void changeVisibility(String id, int alpha, int startTick, int endTick) {
-
+    this.checkNotNull();
+    this.checkIdExists(id);
+    double dalpha = (double) (alpha - elements.get(id).getColor().getAlpha())
+            / (double) (endTick - startTick);
+    for (int i = startTick; i <= endTick; i++) {
+      operations.add(new ChangeVisibilityOp(elements.get(id), dalpha, i));
+    }
   }
 
   @Override
@@ -135,7 +181,9 @@ public class AnimationModel implements IAnimation {
 
   @Override
   public void deleteElement(String id, int tick) {
-
+    this.checkNotNull();
+    this.checkIdExists(id);
+    operations.add(new DeleteOp(elements, operations, elements.get(id), tick));
   }
 
   @Override

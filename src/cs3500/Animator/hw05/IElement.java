@@ -61,4 +61,18 @@ public interface IElement {
    * @param p  the new position of the element.
    */
   void setPosn(Posn p);
+
+  /**
+   * Rotate the element. Positive angles are CCW, negative angles are CW.
+   * @param da  the angle to rotate the element by
+   */
+  void rotate(double da);
+
+  /**
+   * Scale the element by the given scale factor.
+   * 0 < scaleFactor < inf
+   * @param ds the scale factor to multiply the size of the element by
+   * @throws IllegalArgumentException  if the scaleFactor is out of bounds
+   */
+  void scale(double ds);
 }

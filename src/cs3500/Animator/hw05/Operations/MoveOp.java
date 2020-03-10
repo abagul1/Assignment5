@@ -1,4 +1,8 @@
-package cs3500.Animator.hw05;
+package cs3500.Animator.hw05.Operations;
+
+import cs3500.Animator.hw05.AbstractOp;
+import cs3500.Animator.hw05.IElement;
+import cs3500.Animator.hw05.Posn;
 
 /**
  * Extends {@code AbstractOp} to handle the incremental movement of an element.
@@ -28,5 +32,10 @@ public class MoveOp extends AbstractOp {
     double currentX = element.getPosn().getX();
     double currentY = element.getPosn().getY();
     element.setPosn(new Posn(currentX + dx, currentY + dy));
+  }
+
+  @Override
+  public String getElementId() {
+    return element.getID();
   }
 }

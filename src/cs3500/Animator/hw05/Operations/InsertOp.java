@@ -1,6 +1,9 @@
-package cs3500.Animator.hw05;
+package cs3500.Animator.hw05.Operations;
 
 import java.util.Map;
+
+import cs3500.Animator.hw05.IElement;
+import cs3500.Animator.hw05.IOperation;
 
 public class InsertOp implements IOperation {
 
@@ -22,5 +25,10 @@ public class InsertOp implements IOperation {
   @Override
   public void fire() {
     elements.put(elementToAdd.getID(), elementToAdd);
+  }
+
+  @Override
+  public String getElementId() {
+    return elementToAdd.getID();
   }
 }

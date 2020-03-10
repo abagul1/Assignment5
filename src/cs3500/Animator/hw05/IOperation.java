@@ -33,4 +33,9 @@ public interface IOperation {
    * the current tick of the model.
    */
   void fire();
+
+  /**
+   * Return the element ID relating to the operation.
+   */
+  String getElementId();
 }
