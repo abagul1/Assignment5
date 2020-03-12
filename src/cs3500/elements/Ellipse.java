@@ -50,7 +50,7 @@ public class Ellipse extends AbstractElement {
    */
   @Override
   public double[] getDimensions() {
-    double dim[] = {getHeight(), getWidth()};
+    double[] dim = {getHeight(), getWidth()};
     return dim;
   }
 

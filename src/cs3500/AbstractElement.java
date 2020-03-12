@@ -1,9 +1,6 @@
 package cs3500;
 
 import java.awt.Color;
-import java.util.Objects;
-
-import cs3500.elements.Ellipse;
 
 /**
  * Abstract class that implements the {@code IElement} interface.
