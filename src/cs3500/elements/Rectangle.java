@@ -1,15 +1,27 @@
-package cs3500.Animator.hw05.elements;
+package cs3500.elements;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 
-import cs3500.Animator.hw05.AbstractElement;
-import cs3500.Animator.hw05.Posn;
+import cs3500.AbstractElement;
+import cs3500.Posn;
 
+/**
+ * Element to represent a rectangle.
+ */
 public class Rectangle extends AbstractElement {
   private double height;
   private double width;
 
+  /**
+   * Constructor for a rectangle.
+   * @param id element id
+   * @param c color
+   * @param p posn
+   * @param angle angle
+   * @param height height
+   * @param width width
+   */
   public Rectangle(String id, Color c, Posn p, double angle, double height, double width) {
     super(c, p, id, angle);
     this.height = height;
@@ -29,15 +41,12 @@ public class Rectangle extends AbstractElement {
     if (!(that instanceof Rectangle)) {
       return false;
     }
-    if (((Rectangle) that).height == this.height && ((Rectangle) that).width == this.width
+    return (((Rectangle) that).height == this.height && ((Rectangle) that).width == this.width
             && ((Rectangle) that).getPosn().getX() == this.getPosn().getY()
             && ((Rectangle) that).getPosn().getY() == this.getPosn().getY()
             && ((Rectangle) that).color == this.color
-            && ((Rectangle) that).angle == this.angle) {
-      return true;
-    }
+            && ((Rectangle) that).angle == this.angle);
 
-    return false;
   }
 
   @Override

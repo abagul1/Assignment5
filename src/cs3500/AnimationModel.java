@@ -1,4 +1,4 @@
-package cs3500.Animator.hw05;
+package cs3500;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -7,16 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.lang.model.element.Element;
-import javax.swing.text.html.HTMLDocument;
-
-import cs3500.Animator.hw05.operations.ChangeColorOp;
-import cs3500.Animator.hw05.operations.ChangeVisibilityOp;
-import cs3500.Animator.hw05.operations.DeleteOp;
-import cs3500.Animator.hw05.operations.InsertOp;
-import cs3500.Animator.hw05.operations.MoveOp;
-import cs3500.Animator.hw05.operations.RotateOp;
-import cs3500.Animator.hw05.operations.ScaleOp;
+import cs3500.operations.ChangeColorOp;
+import cs3500.operations.ChangeVisibilityOp;
+import cs3500.operations.DeleteOp;
+import cs3500.operations.InsertOp;
+import cs3500.operations.MoveOp;
+import cs3500.operations.RotateOp;
+import cs3500.operations.ScaleOp;
 
 /**
  * Represents the Animation with all the elements and operations.
@@ -34,7 +31,7 @@ public class AnimationModel implements IAnimation {
   int windowHeight;
 
   /**
-   * Constructor for animation model
+   * Constructor for animation model.
    * @param numTicksPerFrame speed of animation
    * @param width width of animation panel
    * @param height height of animation panel
@@ -69,12 +66,12 @@ public class AnimationModel implements IAnimation {
   }
 
   /**
-   * Creates a textual description of the animation
-   * @param id
-   * @param x
-   * @param y
-   * @param startTick
-   * @param endTick
+   * Creates a textual description of the move operation in the animation.
+   * @param id id of the move to be created
+   * @param x destination x coordinate
+   * @param y destination y coordinate
+   * @param startTick start tick to move
+   * @param endTick end tick to move
    */
   private void addVerboseMove(String id, double x, double y, int startTick, int endTick) {
     if (verboseOps == null) {
@@ -84,7 +81,8 @@ public class AnimationModel implements IAnimation {
     StringBuilder str = new StringBuilder();
     double startingX = elements.get(id).getPosn().getX();
     double startingY = elements.get(id).getPosn().getY();
-    str.append("MOVE").append (" ").append(id).append(" ").append(startTick).append(" ").append(startingX)
+    str.append("MOVE").append(" ").append(id).append(" ").append(startTick)
+            .append(" ").append(startingX)
             .append(" ").append(startingY).append(" ").append(endTick).append(" ").append(x)
             .append(" ").append(y);
 
@@ -127,6 +125,13 @@ public class AnimationModel implements IAnimation {
     this.addVerboseRotate(id, angle, startTick, endTick);
   }
 
+  /**
+   * Create a textual description of the rotate operation.
+   * @param id id of the move to be created
+   * @param angle angle to be rotated
+   * @param startTick start tick to rotate
+   * @param endTick end tick to rotate
+   */
   private void addVerboseRotate(String id, double angle, int startTick, int endTick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -136,7 +141,8 @@ public class AnimationModel implements IAnimation {
 
     double startingAngle = elements.get(id).getAngle();
 
-    str.append("ROTATE").append (" ").append(id).append(" ").append(startTick).append(" ").append(startingAngle)
+    str.append("ROTATE").append(" ").append(id).append(" ").append(startTick).append(" ")
+            .append(startingAngle)
             .append(" ").append(endTick).append(" ").append(angle);
 
     if (!verboseOps.containsKey(id)) {
@@ -156,6 +162,13 @@ public class AnimationModel implements IAnimation {
     this.addVerboseScale(id, scaleFactor, startTick, endTick);
   }
 
+  /**
+   * Create a textual description of the rotate operation.
+   * @param id id of the move to be created
+   * @param scaleFactor angle to be rotated
+   * @param startTick start tick to rotate
+   * @param endTick end tick to rotate
+   */
   private void addVerboseScale(String id, double scaleFactor, int startTick, int endTick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -189,6 +202,13 @@ public class AnimationModel implements IAnimation {
     this.addVerboseColor(id, color, startTick, endTick);
   }
 
+  /**
+   * Create a textual description of the color operation.
+   * @param id ID of the color needed to change
+   * @param color color to change to
+   * @param startTick start of operation
+   * @param endTick end of operation
+   */
   private void addVerboseColor(String id, Color color, int startTick, int endTick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -199,7 +219,7 @@ public class AnimationModel implements IAnimation {
     double startingG = elements.get(id).getColor().getGreen();
     double startingB = elements.get(id).getColor().getBlue();
 
-    str.append("CHANGE COLOR").append (" ").append(id).append(" ").append(startTick).append(" ")
+    str.append("CHANGE COLOR").append(" ").append(id).append(" ").append(startTick).append(" ")
             .append(startingR).append(" ")
             .append(startingG).append(" ")
             .append(startingB).append(" ")
@@ -231,6 +251,13 @@ public class AnimationModel implements IAnimation {
     this.addVerboseVisibility(id, alpha, startTick, endTick);
   }
 
+  /**
+   * Create a textual description of the visibility operation.
+   * @param id ID of the alpha needed to change
+   * @param alpha alpha to change to
+   * @param startTick start of operation
+   * @param endTick end of operation
+   */
   private void addVerboseVisibility(String id, int alpha, int startTick, int endTick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -239,7 +266,7 @@ public class AnimationModel implements IAnimation {
     StringBuilder str = new StringBuilder();
     double startingAlpha = elements.get(id).getColor().getAlpha();
 
-    str.append("CHANGE VISIBILITY").append (" ").append(id).append(" ").append(startTick).append(" ")
+    str.append("CHANGE VISIBILITY").append(" ").append(id).append(" ").append(startTick).append(" ")
             .append(startingAlpha).append(" ").append(endTick).append(" ").append(alpha);
 
     if (!verboseOps.containsKey(id)) {
@@ -275,6 +302,11 @@ public class AnimationModel implements IAnimation {
     }
   }
 
+  /**
+   * Create a textual description of the insert operation.
+   * @param element element to insert
+   * @param tick tick to insert at
+   */
   private void addVerboseInsert(IElement element, int tick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -300,6 +332,11 @@ public class AnimationModel implements IAnimation {
     this.addVerboseDelete(elements.get(id), tick);
   }
 
+  /**
+   * Create a textual description of the delete operation.
+   * @param element element to delete
+   * @param tick tick to delete at
+   */
   private void addVerboseDelete(IElement element, int tick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -318,7 +355,7 @@ public class AnimationModel implements IAnimation {
   public String getVerboseAnimation() {
     StringBuilder str = new StringBuilder();
     for (String id : verboseOps.keySet()) {
-      for(String i : verboseOps.get(id)) {
+      for (String i : verboseOps.get(id)) {
         str.append(i).append("\n");
       }
       str.append("\n");
@@ -332,7 +369,7 @@ public class AnimationModel implements IAnimation {
     while (!operations.isEmpty()) {
       for (Iterator<IOperation> iterator = operations.iterator(); iterator.hasNext();) {
         IOperation op = iterator.next();
-          if (op.getTickToFireAt() == currentTick) {
+        if (op.getTickToFireAt() == currentTick) {
           op.fire();
           iterator.remove();
         }

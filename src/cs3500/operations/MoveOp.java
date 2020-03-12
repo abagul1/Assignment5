@@ -1,8 +1,8 @@
-package cs3500.Animator.hw05.operations;
+package cs3500.operations;
 
-import cs3500.Animator.hw05.AbstractOp;
-import cs3500.Animator.hw05.IElement;
-import cs3500.Animator.hw05.Posn;
+import cs3500.IElement;
+import cs3500.Posn;
+import cs3500.AbstractOp;
 
 /**
  * Extends {@code AbstractOp} to handle the incremental movement of an element.

@@ -1,4 +1,4 @@
-package cs3500.Animator.hw05;
+package cs3500;
 
 /**
  * Represents a coordinate upon a 2D-plane.
@@ -9,7 +9,7 @@ public class Posn {
   private double y;
 
   /**
-   * Constructs a Posn, given an x-coordinate and a y-coordinate
+   * Constructs a Posn, given an x-coordinate and a y-coordinate.
    *
    * @param x  x-coordinate.
    * @param y  y-coordinate.
@@ -21,7 +21,6 @@ public class Posn {
 
   /**
    * Constructs a Posn, given another Posn.
-   *
    * Defensive-copy constructor.
    *
    * @param p  The Posn to copy.

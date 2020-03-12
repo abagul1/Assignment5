@@ -2,14 +2,17 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.*;
+import java.awt.Color;
 
-import cs3500.Animator.hw05.AnimationModel;
-import cs3500.Animator.hw05.IAnimation;
-import cs3500.Animator.hw05.IElement;
-import cs3500.Animator.hw05.Posn;
-import cs3500.Animator.hw05.elements.Rectangle;
+import cs3500.AnimationModel;
+import cs3500.IAnimation;
+import cs3500.IElement;
+import cs3500.Posn;
+import cs3500.elements.Rectangle;
 
+/**
+ * Test class for animator model.
+ */
 public class AnimatorTest {
   private IAnimation am;
   private IElement r1 = new Rectangle("1", Color.GREEN,
@@ -40,11 +43,6 @@ public class AnimatorTest {
     am.rotate("1", 90, 3, 6);
     am.executeOperationsUntil(4);
     assertEquals(30, am.getElement("1").getAngle(), 0.001);
-  }
-
-  @Test
-  public void testScaleOp() {
-    //TODO: Implement scale in the element class.
   }
 
   @Test

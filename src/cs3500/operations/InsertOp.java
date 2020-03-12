@@ -1,28 +1,38 @@
-package cs3500.Animator.hw05.operations;
+package cs3500.operations;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Map;
 
-import cs3500.Animator.hw05.IElement;
-import cs3500.Animator.hw05.IOperation;
+import cs3500.IElement;
+import cs3500.IOperation;
 
+/**
+ * extends {@code AbstractOp} to handle the insertion of an element.
+ */
 public class InsertOp implements IOperation {
 
   private Map<String, IElement> elements;
   private IElement elementToAdd;
   private int alpha;
-  private int TickToFireAt;
+  private int tickToFireAt;
 
+  /**
+   * Constructor for insertion.
+   * @param elements list of elements
+   * @param elem to be inserted
+   * @param alpha original alpha value
+   * @param tick tick to insert at
+   */
   public InsertOp(Map<String, IElement> elements, IElement elem, int alpha, int tick) {
     this.elements = elements;
     this.elementToAdd = elem;
-    this.TickToFireAt = tick;
+    this.tickToFireAt = tick;
     this.alpha = alpha;
   }
 
   @Override
   public int getTickToFireAt() {
-    return TickToFireAt;
+    return tickToFireAt;
   }
 
   @Override
@@ -39,6 +49,10 @@ public class InsertOp implements IOperation {
     return elementToAdd.getID();
   }
 
+  /**
+   * Returns the initial alpha.
+   * @return the alpha value
+   */
   public int getAlpha() {
     return alpha;
   }
