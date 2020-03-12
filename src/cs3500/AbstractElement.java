@@ -73,7 +73,7 @@ public abstract class AbstractElement implements IElement {
 
   @Override
   public double getAngle() {
-    return angle;
+    return angle % 360;
   }
 
   @Override

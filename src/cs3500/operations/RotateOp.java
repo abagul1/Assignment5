@@ -9,22 +9,28 @@ import cs3500.IElement;
 public class RotateOp extends AbstractOp {
 
   private IElement element;
-  private double da;
+  private double angle;
+  private int endTick;
+  private  int startTick;
 
   /**
    * Constructor for a rotation.
    * @param e element to be rotated
-   * @param da amount for the angle to be rotated
+   * @param angle amount for the angle to be rotated
    * @param tick tick to start rotation
+   * @param endTick ending point for rotation
    */
-  public RotateOp(IElement e, double da, int tick) {
+  public RotateOp(IElement e, double angle, int tick, int startTick, int endTick) {
     super(tick);
     this.element = e;
-    this.da = da;
+    this.angle = angle;
+    this.endTick = endTick;
+    this.startTick = startTick;
   }
 
   @Override
   public void fire() {
+    double da = angle / (endTick - startTick);
     element.rotate(da);
   }
 

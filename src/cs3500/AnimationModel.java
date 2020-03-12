@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import cs3500.operations.ChangeColorOp;
 import cs3500.operations.ChangeVisibilityOp;
 import cs3500.operations.DeleteOp;
@@ -51,10 +52,8 @@ public class AnimationModel implements IAnimation {
   public void move(String id, double x, double y, int startTick, int endTick) {
     this.checkNotNull();
 
-    double deltaX = (x - elements.get(id).getPosn().getX()) / (endTick - startTick);
-    double deltaY = (y - elements.get(id).getPosn().getY()) / (endTick - startTick);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new MoveOp(elements.get(id), deltaX, deltaY, i));
+      operations.add(new MoveOp(elements.get(id), x, y, i, endTick));
     }
 
     try {
@@ -118,9 +117,8 @@ public class AnimationModel implements IAnimation {
   public void rotate(String id, double angle, int startTick, int endTick) {
     this.checkNotNull();
     this.checkIdExists(id);
-    double da = angle / (endTick - startTick);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new RotateOp(elements.get(id), da, i));
+      operations.add(new RotateOp(elements.get(id), angle, i, startTick, endTick));
     }
     this.addVerboseRotate(id, angle, startTick, endTick);
   }
@@ -155,9 +153,8 @@ public class AnimationModel implements IAnimation {
   public void scale(String id, double scaleFactor, int startTick, int endTick) {
     this.checkNotNull();
     this.checkIdExists(id);
-    double ds = scaleFactor / (endTick - startTick);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new ScaleOp(elements.get(id), ds, i));
+      operations.add(new ScaleOp(elements.get(id), scaleFactor, i, endTick));
     }
     this.addVerboseScale(id, scaleFactor, startTick, endTick);
   }
@@ -189,14 +186,9 @@ public class AnimationModel implements IAnimation {
   public void changeColor(String id, Color color, int startTick, int endTick) {
     this.checkNotNull();
     this.checkIdExists(id);
-    double dr = (double) (color.getRed() - elements.get(id).getColor().getRed())
-            / (double) (endTick - startTick);
-    double dg = (double) (color.getGreen() - elements.get(id).getColor().getGreen())
-            / (double) (endTick - startTick);
-    double db = (double) (color.getBlue() - elements.get(id).getColor().getBlue())
-            / (double) (endTick - startTick);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new ChangeColorOp(elements.get(id), dr, dg, db, i));
+      operations.add(new ChangeColorOp(elements.get(id), color.getRed(),
+              color.getGreen(), color.getBlue(), i, endTick));
     }
 
     this.addVerboseColor(id, color, startTick, endTick);
@@ -237,16 +229,8 @@ public class AnimationModel implements IAnimation {
   public void changeVisibility(String id, int alpha, int startTick, int endTick) {
     this.checkNotNull();
     this.checkIdExists(id);
-    int trueAlpha = 0;
-    for (IOperation op : operations) {
-      if (op.getElementId().equals(id) && op instanceof InsertOp) {
-        trueAlpha = ((InsertOp) op).getAlpha();
-      }
-    }
-    double dalpha = (double) (alpha - trueAlpha)
-            / (endTick - startTick);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new ChangeVisibilityOp(elements.get(id), dalpha, i));
+      operations.add(new ChangeVisibilityOp(elements.get(id), alpha, i, endTick));
     }
     this.addVerboseVisibility(id, alpha, startTick, endTick);
   }
@@ -366,13 +350,21 @@ public class AnimationModel implements IAnimation {
 
   @Override
   public void executeOperations() {
+    List<IOperation> currentOps = new ArrayList<>();
     while (!operations.isEmpty()) {
       for (Iterator<IOperation> iterator = operations.iterator(); iterator.hasNext();) {
         IOperation op = iterator.next();
         if (op.getTickToFireAt() == currentTick) {
+          for (IOperation co : currentOps) {
+            if (co.getElementId().equals(op.getElementId()) && op.getClass() == co.getClass()) {
+              throw new IllegalArgumentException("Cannot have two motions overlap");
+            }
+          }
+          currentOps.add(op);
           op.fire();
           iterator.remove();
         }
+        currentOps.clear();
       }
       currentTick++;
     }
@@ -380,6 +372,7 @@ public class AnimationModel implements IAnimation {
 
   @Override
   public void executeOperationsUntil(int tick) {
+    List<IOperation> currentOps = new ArrayList<>();
     for (currentTick = 0; currentTick < tick; currentTick++) {
       if (operations.isEmpty()) {
         break;
@@ -387,6 +380,12 @@ public class AnimationModel implements IAnimation {
       for (Iterator<IOperation> iterator = operations.iterator(); iterator.hasNext();) {
         IOperation op = iterator.next();
         if (op.getTickToFireAt() == currentTick) {
+          for (IOperation co : currentOps) {
+            if (co.getElementId().equals(op.getElementId()) && op.getClass() == co.getClass()) {
+              throw new IllegalArgumentException("Cannot have two motions overlap");
+            }
+          }
+          currentOps.add(op);
           op.fire();
           iterator.remove();
         }

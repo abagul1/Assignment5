@@ -8,22 +8,25 @@ import cs3500.IElement;
  */
 public class ScaleOp extends AbstractOp {
   private IElement element;
-  private double ds;
+  private double scaleFactor;
+  private double endTick;
 
   /**
    * Constructor for a scale operation.
    * @param e element to scale
-   * @param ds delta scale
+   * @param scaleFactor Factor to scale by
    * @param tick tick to fire at
    */
-  public ScaleOp(IElement e, double ds, int tick) {
+  public ScaleOp(IElement e, double scaleFactor, int tick, int endTick) {
     super(tick);
     this.element = e;
-    this.ds = ds;
+    this.scaleFactor = scaleFactor;
+    this.endTick = endTick;
   }
 
   @Override
   public void fire() {
+    double ds = scaleFactor / (endTick - tickToFireAt);
     element.scale(ds);
   }
 

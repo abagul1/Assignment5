@@ -10,22 +10,26 @@ import cs3500.IElement;
  */
 public class ChangeVisibilityOp extends AbstractOp {
   private IElement element;
-  private int dalpha;
+  private int alpha;
+  private int endTick;
 
   /**
    * Constructor for visibility.
    * @param e element to change
-   * @param dalpha change in alpha per tick
+   * @param alpha change in alpha
    * @param tick tick to change visibility
+   * @param endTick tick that operation ends
    */
-  public ChangeVisibilityOp(IElement e, double dalpha, int tick) {
+  public ChangeVisibilityOp(IElement e, int alpha, int tick, int endTick) {
     super(tick);
     this.element = e;
-    this.dalpha = (int) dalpha;
+    this.alpha = alpha;
+    this.endTick = endTick;
   }
 
   @Override
   public void fire() {
+    int dalpha = (alpha - element.getColor().getAlpha()) / (endTick - tickToFireAt);
     Color c = new Color(element.getColor().getRed(),
             element.getColor().getGreen(),
             element.getColor().getBlue(), element.getColor().getAlpha() + dalpha);
