@@ -86,4 +86,59 @@ public class AnimatorTest {
     am.executeOperations();
     assertEquals(23, am.getElement("1").getColor().getAlpha());
   }
+
+  @Test
+  public void testGetVerboseAnimationMove() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.move("1", 60, 30, 3, 5);
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nMOVE 1 3 50.0 50.0 5 60.0 30.0\n\n", str);
+  }
+
+  @Test
+  public void testGetVerboseAnimationRotate() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.rotate(r1.getID(), 90, 3, 5 );
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nROTATE 1 3 0.0 5 90.0\n\n", str);
+  }
+
+  @Test
+  public void testGetVerboseAnimationScale() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.scale("1", 2, 3,  5);
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nSCALE 1 3 5 2.0\n\n", str);
+  }
+
+  @Test
+  public void testGetVerboseAnimationChangeColor() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.changeColor("1", Color.BLUE, 6, 8);
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nCHANGE COLOR 1 6 0.0 255.0 0.0 8 0 0 255\n\n", str);
+  }
+
+  @Test
+  public void testGetVerboseAnimationChangeVisibility() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.changeVisibility("1", 60, 3, 5);
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nCHANGE VISIBILITY 1 3 0.0 5 60\n\n", str);
+  }
+
+  @Test
+  public void testGetVerboseAnimationDelete() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.deleteElement("1", 5);
+    String str = am.getVerboseAnimation();
+    assertEquals("INSERT 1 2\nDELETE 1 5\n\n", str);
+  }
+
 }

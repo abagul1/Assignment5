@@ -18,7 +18,7 @@ public class Rectangle extends AbstractElement {
 
   @Override
   public void scale(double ds) {
-    //Implement Scale
+    //Implement Scale with Swing
   }
 
   @Override

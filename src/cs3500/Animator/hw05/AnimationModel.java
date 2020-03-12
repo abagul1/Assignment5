@@ -18,11 +18,14 @@ import cs3500.Animator.hw05.operations.MoveOp;
 import cs3500.Animator.hw05.operations.RotateOp;
 import cs3500.Animator.hw05.operations.ScaleOp;
 
+/**
+ * Represents the Animation with all the elements and operations.
+ */
 public class AnimationModel implements IAnimation {
 
   private Map<String, IElement> elements;
   private List<IOperation> operations;
-  private Map<Integer, List<String>> verboseOps;
+  private Map<String, List<String>> verboseOps;
 
   int currentTick;
   int ticksPerFrame;
@@ -30,6 +33,12 @@ public class AnimationModel implements IAnimation {
   int windowWidth;
   int windowHeight;
 
+  /**
+   * Constructor for animation model
+   * @param numTicksPerFrame speed of animation
+   * @param width width of animation panel
+   * @param height height of animation panel
+   */
   public AnimationModel(int numTicksPerFrame, int width, int height) {
     elements = new HashMap<>();
     operations = new ArrayList<>();
@@ -59,6 +68,14 @@ public class AnimationModel implements IAnimation {
     }
   }
 
+  /**
+   * Creates a textual description of the animation
+   * @param id
+   * @param x
+   * @param y
+   * @param startTick
+   * @param endTick
+   */
   private void addVerboseMove(String id, double x, double y, int startTick, int endTick) {
     if (verboseOps == null) {
       throw new IllegalStateException("Error: Verbose Ops is null");
@@ -67,14 +84,14 @@ public class AnimationModel implements IAnimation {
     StringBuilder str = new StringBuilder();
     double startingX = elements.get(id).getPosn().getX();
     double startingY = elements.get(id).getPosn().getY();
-    str.append("MOVE ").append(id).append(" ").append(startTick).append(" ").append(startingX)
+    str.append("MOVE").append (" ").append(id).append(" ").append(startTick).append(" ").append(startingX)
             .append(" ").append(startingY).append(" ").append(endTick).append(" ").append(x)
             .append(" ").append(y);
 
-    if (!verboseOps.containsKey(startTick)) {
-      verboseOps.put(startTick, new ArrayList<>());
+    if (!verboseOps.containsKey(id)) {
+      throw new IllegalStateException("Element can't be moved before it exists");
     }
-    verboseOps.get(startTick).add(str.toString());
+    verboseOps.get(id).add(str.toString());
   }
 
   /**
@@ -107,6 +124,25 @@ public class AnimationModel implements IAnimation {
     for (int i = startTick; i < endTick; i++) {
       operations.add(new RotateOp(elements.get(id), da, i));
     }
+    this.addVerboseRotate(id, angle, startTick, endTick);
+  }
+
+  private void addVerboseRotate(String id, double angle, int startTick, int endTick) {
+    if (verboseOps == null) {
+      throw new IllegalStateException("Error: Verbose Ops is null");
+    }
+
+    StringBuilder str = new StringBuilder();
+
+    double startingAngle = elements.get(id).getAngle();
+
+    str.append("ROTATE").append (" ").append(id).append(" ").append(startTick).append(" ").append(startingAngle)
+            .append(" ").append(endTick).append(" ").append(angle);
+
+    if (!verboseOps.containsKey(id)) {
+      throw new IllegalStateException("Element can't be rotated before it exists");
+    }
+    verboseOps.get(id).add(str.toString());
   }
 
   @Override
@@ -117,6 +153,23 @@ public class AnimationModel implements IAnimation {
     for (int i = startTick; i < endTick; i++) {
       operations.add(new ScaleOp(elements.get(id), ds, i));
     }
+    this.addVerboseScale(id, scaleFactor, startTick, endTick);
+  }
+
+  private void addVerboseScale(String id, double scaleFactor, int startTick, int endTick) {
+    if (verboseOps == null) {
+      throw new IllegalStateException("Error: Verbose Ops is null");
+    }
+
+    StringBuilder str = new StringBuilder();
+
+    str.append("SCALE").append(" ").append(id).append(" ").append(startTick).append(" ")
+            .append(endTick).append(" ").append(scaleFactor);
+
+    if (!verboseOps.containsKey(id)) {
+      throw new IllegalStateException("Element can't be scaled before it exists");
+    }
+    verboseOps.get(id).add(str.toString());
   }
 
   @Override
@@ -132,6 +185,32 @@ public class AnimationModel implements IAnimation {
     for (int i = startTick; i < endTick; i++) {
       operations.add(new ChangeColorOp(elements.get(id), dr, dg, db, i));
     }
+
+    this.addVerboseColor(id, color, startTick, endTick);
+  }
+
+  private void addVerboseColor(String id, Color color, int startTick, int endTick) {
+    if (verboseOps == null) {
+      throw new IllegalStateException("Error: Verbose Ops is null");
+    }
+
+    StringBuilder str = new StringBuilder();
+    double startingR = elements.get(id).getColor().getRed();
+    double startingG = elements.get(id).getColor().getGreen();
+    double startingB = elements.get(id).getColor().getBlue();
+
+    str.append("CHANGE COLOR").append (" ").append(id).append(" ").append(startTick).append(" ")
+            .append(startingR).append(" ")
+            .append(startingG).append(" ")
+            .append(startingB).append(" ")
+            .append(endTick).append(" ")
+            .append(color.getRed()).append(" ")
+            .append(color.getGreen()).append(" ").append(color.getBlue());
+
+    if (!verboseOps.containsKey(id)) {
+      throw new IllegalStateException("Element color can't be changed before it exists");
+    }
+    verboseOps.get(id).add(str.toString());
   }
 
   @Override
@@ -149,6 +228,24 @@ public class AnimationModel implements IAnimation {
     for (int i = startTick; i < endTick; i++) {
       operations.add(new ChangeVisibilityOp(elements.get(id), dalpha, i));
     }
+    this.addVerboseVisibility(id, alpha, startTick, endTick);
+  }
+
+  private void addVerboseVisibility(String id, int alpha, int startTick, int endTick) {
+    if (verboseOps == null) {
+      throw new IllegalStateException("Error: Verbose Ops is null");
+    }
+
+    StringBuilder str = new StringBuilder();
+    double startingAlpha = elements.get(id).getColor().getAlpha();
+
+    str.append("CHANGE VISIBILITY").append (" ").append(id).append(" ").append(startTick).append(" ")
+            .append(startingAlpha).append(" ").append(endTick).append(" ").append(alpha);
+
+    if (!verboseOps.containsKey(id)) {
+      throw new IllegalStateException("Element visibility can't be changed before it exists");
+    }
+    verboseOps.get(id).add(str.toString());
   }
 
   @Override
@@ -186,10 +283,13 @@ public class AnimationModel implements IAnimation {
     StringBuilder str = new StringBuilder();
     str.append("INSERT ").append(element.getID()).append(" ").append(tick);
 
-    if (!verboseOps.containsKey(tick)) {
-      verboseOps.put(tick, new ArrayList<>());
+    if (verboseOps.containsKey(element.getID())) {
+      throw new IllegalArgumentException("Element ID already exists");
     }
-    verboseOps.get(tick).add(str.toString());
+    else {
+      verboseOps.put(element.getID(), new ArrayList<>());
+      verboseOps.get(element.getID()).add(str.toString());
+    }
   }
 
   @Override
@@ -197,16 +297,34 @@ public class AnimationModel implements IAnimation {
     this.checkNotNull();
     this.checkIdExists(id);
     operations.add(new DeleteOp(elements, operations, elements.get(id), tick));
+    this.addVerboseDelete(elements.get(id), tick);
+  }
+
+  private void addVerboseDelete(IElement element, int tick) {
+    if (verboseOps == null) {
+      throw new IllegalStateException("Error: Verbose Ops is null");
+    }
+
+    StringBuilder str = new StringBuilder();
+    str.append("DELETE ").append(element.getID()).append(" ").append(tick);
+
+    if (!verboseOps.containsKey(element.getID())) {
+      throw new IllegalArgumentException("Element can't be deleted before it exists");
+    }
+    verboseOps.get(element.getID()).add(str.toString());
   }
 
   @Override
   public String getVerboseAnimation() {
-    return null;
-  }
+    StringBuilder str = new StringBuilder();
+    for (String id : verboseOps.keySet()) {
+      for(String i : verboseOps.get(id)) {
+        str.append(i).append("\n");
+      }
+      str.append("\n");
+    }
 
-  @Override
-  public IFrame getFrameAtTick(int tick) {
-    return null;
+    return str.toString();
   }
 
   @Override
