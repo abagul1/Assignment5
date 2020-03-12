@@ -364,9 +364,9 @@ public class AnimationModel implements IAnimation {
           op.fire();
           iterator.remove();
         }
-        currentOps.clear();
       }
       currentTick++;
+      currentOps.clear();
     }
   }
 
@@ -390,6 +390,7 @@ public class AnimationModel implements IAnimation {
           iterator.remove();
         }
       }
+      currentOps.clear();
     }
   }
 

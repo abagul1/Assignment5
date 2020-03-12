@@ -8,6 +8,7 @@ import cs3500.AnimationModel;
 import cs3500.IAnimation;
 import cs3500.IElement;
 import cs3500.Posn;
+import cs3500.elements.Ellipse;
 import cs3500.elements.Rectangle;
 
 /**
@@ -17,6 +18,8 @@ public class AnimatorTest {
   private IAnimation am;
   private IElement r1 = new Rectangle("1", Color.GREEN,
           new Posn(50,50),0, 10,5);
+  private IElement e1 = new Ellipse("e1", Color.BLUE,
+          new Posn(25, 25), 0, 20, 10);
 
   @Test
   public void testMoveOp() {
@@ -34,6 +37,29 @@ public class AnimatorTest {
     am.insertElement(r1, 2);
     am.executeOperations();
     assertEquals(am.getElement("1"), r1);
+  }
+
+  @Test
+  public void testInsertOpTwoElementsSameTime() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.insertElement(e1, 2);
+    am.executeOperations();
+    assertEquals(am.getElement("1"), r1);
+    assertEquals(am.getElement("e1"), e1);
+  }
+
+  @Test
+  public void testInsertOpTwoElementsDiffTime() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.insertElement(e1, 5);
+    am.executeOperationsUntil(3);
+    assertEquals(am.getElement("1").getColor().getAlpha(), 255);
+    assertEquals(am.getElement("e1").getColor().getAlpha(), 0);
+    am.executeOperations();
+    assertEquals(am.getElement("1").getColor().getAlpha(), 255);
+    assertEquals(am.getElement("e1").getColor().getAlpha(), 255);
   }
 
   @Test
@@ -149,17 +175,22 @@ public class AnimatorTest {
     assertEquals("INSERT 1 2\nDELETE 1 5\n\n", str);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testSimultaneousMove() {
     am = new AnimationModel(1, 500, 500);
     am.insertElement(r1, 2);
     am.move("1", 34, 25, 3, 5);
     am.move("1", 34, 25, 4, 7);
-    try {
-      am.executeOperations();
-    } catch (IllegalArgumentException iae) {
-      assertTrue(iae.getMessage().length() > 0);
-    }
+    am.executeOperations();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testSimultaneousMoveWithExecuteUntil() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.move("1", 34, 25, 3, 5);
+    am.move("1", 34, 25, 4, 7);
+    am.executeOperationsUntil(6);
   }
 
   @Test
