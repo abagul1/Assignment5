@@ -32,7 +32,7 @@ public class Rectangle extends AbstractElement {
    * Gets the height of an rectangle
    * @return height
    */
-  public double getHeight() {
+  private double getHeight() {
     return this.height;
   }
 
@@ -40,8 +40,18 @@ public class Rectangle extends AbstractElement {
    * Gets the width of an rectangle
    * @return width
    */
-  public double getWidth() {
+  private double getWidth() {
     return this.width;
+  }
+
+  /**
+   * Returns an array of doubles of length 2, in the following order: Height, Width.
+   * @return  the array of dimensions.
+   */
+  @Override
+  public double[] getDimensions() {
+    double dim[] = {getHeight(), getWidth()};
+    return dim;
   }
 
   @Override

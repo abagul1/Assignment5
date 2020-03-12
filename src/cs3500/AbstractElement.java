@@ -83,4 +83,7 @@ public abstract class AbstractElement implements IElement {
 
   @Override
   public abstract void scale(double ds);
+
+  @Override
+  public abstract double[] getDimensions();
 }

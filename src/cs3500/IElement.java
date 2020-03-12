@@ -41,6 +41,16 @@ public interface IElement {
   double getAngle();
 
   /**
+   * Get the dimensions of this element.
+   * The number of arguments within the array is variable, based on the implementation of the
+   * specific element.
+   * Specific element implementations must document the order that significant dimensions appear
+   * in.
+   * @return  the number of significant dimensions needed to describe an object
+   */
+  double[] getDimensions();
+
+  /**
    * Sets the color of an element to the specified color.
    * As Color is in RGBA format, this can be used to alter the alpha value as well as the actual
    * color. See {@code java.awt.Color} for different color constructors, as well as various
