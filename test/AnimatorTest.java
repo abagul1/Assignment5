@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import cs3500.AnimationModel;
 import cs3500.IAnimation;
-import cs3500.IElement;
 import cs3500.Posn;
 import cs3500.elements.Rectangle;
 
@@ -15,7 +14,7 @@ import cs3500.elements.Rectangle;
  */
 public class AnimatorTest {
   private IAnimation am;
-  private IElement r1 = new Rectangle("1", Color.GREEN,
+  private Rectangle r1 = new Rectangle("1", Color.GREEN,
           new Posn(50,50),0, 10,5);
 
   @Test
@@ -43,6 +42,16 @@ public class AnimatorTest {
     am.rotate("1", 90, 3, 6);
     am.executeOperationsUntil(4);
     assertEquals(30, am.getElement("1").getAngle(), 0.001);
+  }
+
+  @Test
+  public void testScaleOp() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.scale("1", 125, 3, 6);
+    am.executeOperations();
+    assertEquals(1250, r1.getHeight(), 0.001);
+    assertEquals(625, r1.getWidth(), 0.001);
   }
 
   @Test
@@ -203,5 +212,15 @@ public class AnimatorTest {
     am.changeVisibility("1", 56, 6, 8);
     am.executeOperations();
     assertEquals(56, am.getElement("1").getColor().getAlpha());
+  }
+
+  @Test
+  public void testScaleOp2() {
+    am = new AnimationModel(1, 500, 500);
+    am.insertElement(r1, 2);
+    am.scale("1", 125, 3, 6);
+    am.executeOperations();
+    assertEquals(1250, r1.getHeight(), 0.001);
+    assertEquals(625, r1.getWidth(), 0.001);
   }
 }

@@ -28,9 +28,26 @@ public class Rectangle extends AbstractElement {
     this.width = width;
   }
 
+  /**
+   * Gets the height of an rectangle
+   * @return height
+   */
+  public double getHeight() {
+    return this.height;
+  }
+
+  /**
+   * Gets the width of an rectangle
+   * @return width
+   */
+  public double getWidth() {
+    return this.width;
+  }
+
   @Override
   public void scale(double ds) {
-    //Implement Scale with Swing
+    this.height = height * ds;
+    this.width = width * ds;
   }
 
   @Override

@@ -154,7 +154,7 @@ public class AnimationModel implements IAnimation {
     this.checkNotNull();
     this.checkIdExists(id);
     for (int i = startTick; i < endTick; i++) {
-      operations.add(new ScaleOp(elements.get(id), scaleFactor, i, endTick));
+      operations.add(new ScaleOp(elements.get(id), scaleFactor, i, endTick, startTick));
     }
     this.addVerboseScale(id, scaleFactor, startTick, endTick);
   }

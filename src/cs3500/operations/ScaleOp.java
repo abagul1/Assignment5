@@ -10,6 +10,7 @@ public class ScaleOp extends AbstractOp {
   private IElement element;
   private double scaleFactor;
   private double endTick;
+  private double startTick;
 
   /**
    * Constructor for a scale operation.
@@ -17,16 +18,17 @@ public class ScaleOp extends AbstractOp {
    * @param scaleFactor Factor to scale by
    * @param tick tick to fire at
    */
-  public ScaleOp(IElement e, double scaleFactor, int tick, int endTick) {
+  public ScaleOp(IElement e, double scaleFactor, int tick, int endTick, int startTick) {
     super(tick);
     this.element = e;
     this.scaleFactor = scaleFactor;
     this.endTick = endTick;
+    this.startTick = startTick;
   }
 
   @Override
   public void fire() {
-    double ds = scaleFactor / (endTick - tickToFireAt);
+    double ds = Math.pow(scaleFactor, 1 / (endTick - startTick));
     element.scale(ds);
   }
 
