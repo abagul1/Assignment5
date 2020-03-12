@@ -5,10 +5,7 @@ import java.awt.Color;
 import cs3500.AbstractElement;
 import cs3500.Posn;
 
-/**
- * Element to represent a rectangle.
- */
-public class Rectangle extends AbstractElement {
+public class Ellipse extends AbstractElement {
   private double height;
   private double width;
 
@@ -21,7 +18,7 @@ public class Rectangle extends AbstractElement {
    * @param height height
    * @param width width
    */
-  public Rectangle(String id, Color c, Posn p, double angle, double height, double width) {
+  public Ellipse(String id, Color c, Posn p, double angle, double height, double width) {
     super(c, p, id, angle);
     this.height = height;
     this.width = width;
@@ -64,9 +61,9 @@ public class Rectangle extends AbstractElement {
     if (this == that) {
       return true;
     }
-    if (!(that instanceof Rectangle)) {
+    if (!(that instanceof Ellipse)) {
       return false;
     }
-    return (this.getID().equals(((Rectangle) that).getID()));
+    return (this.getID().equals(((Ellipse) that).getID()));
   }
 }

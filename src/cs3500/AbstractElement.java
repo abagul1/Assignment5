@@ -1,6 +1,7 @@
 package cs3500;
 
 import java.awt.Color;
+import java.util.Objects;
 
 /**
  * Abstract class that implements the {@code IElement} interface.
@@ -79,6 +80,11 @@ public abstract class AbstractElement implements IElement {
   @Override
   public void rotate(double da) {
     this.angle += da;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.getID());
   }
 
   @Override
