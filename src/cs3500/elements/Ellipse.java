@@ -1,16 +1,20 @@
 package cs3500.elements;
 
 import java.awt.Color;
+import java.util.Objects;
 
 import cs3500.AbstractElement;
 import cs3500.Posn;
 
+/**
+ * Element to represent an ellipse.
+ */
 public class Ellipse extends AbstractElement {
   private double height;
   private double width;
 
   /**
-   * Constructor for a rectangle.
+   * Constructor for a ellipse.
    * @param id element id
    * @param c color
    * @param p posn
@@ -25,7 +29,7 @@ public class Ellipse extends AbstractElement {
   }
 
   /**
-   * Gets the height of an rectangle
+   * Gets the height (major axis) of an ellipse.
    * @return height
    */
   private double getHeight() {
@@ -33,7 +37,7 @@ public class Ellipse extends AbstractElement {
   }
 
   /**
-   * Gets the width of an rectangle
+   * Gets the width (minor axis) of an ellipse.
    * @return width
    */
   private double getWidth() {
@@ -65,5 +69,10 @@ public class Ellipse extends AbstractElement {
       return false;
     }
     return (this.getID().equals(((Ellipse) that).getID()));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.getID());
   }
 }

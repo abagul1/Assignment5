@@ -1,6 +1,7 @@
 package cs3500.elements;
 
 import java.awt.Color;
+import java.util.Objects;
 
 import cs3500.AbstractElement;
 import cs3500.Posn;
@@ -28,7 +29,7 @@ public class Rectangle extends AbstractElement {
   }
 
   /**
-   * Gets the height of an rectangle
+   * Gets the height of an rectangle.
    * @return height
    */
   private double getHeight() {
@@ -36,7 +37,7 @@ public class Rectangle extends AbstractElement {
   }
 
   /**
-   * Gets the width of an rectangle
+   * Gets the width of an rectangle.
    * @return width
    */
   private double getWidth() {
@@ -68,5 +69,10 @@ public class Rectangle extends AbstractElement {
       return false;
     }
     return (this.getID().equals(((Rectangle) that).getID()));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.getID());
   }
 }
